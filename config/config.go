@@ -2,8 +2,10 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 const version = "1.0.0"
@@ -26,12 +28,12 @@ var modelProviders = map[string][]string{
 
 var AvailableModels = append(openAIModels, anthropicModels...)
 
-func InitConfig(model string) Config {
+func InitConfig() Config {
 	paths := buildPaths()
 
 	config, err := LoadConfig(paths)
 	if err != nil {
-		config = defaultConfig(model, paths)
+		config = defaultConfig(paths)
 		err := SaveConfig(config)
 		if err != nil {
 			panic("Failed to save config: " + err.Error())
@@ -45,6 +47,8 @@ func buildPaths() ConfigPaths {
 	configDir := filepath.Join(os.Getenv("HOME"), ".go-agent")
 	configFile := filepath.Join(configDir, "config.json")
 
+	fmt.Println(configDir)
+
 	_ = os.MkdirAll(configDir, 0755)
 
 	return ConfigPaths{
@@ -53,19 +57,10 @@ func buildPaths() ConfigPaths {
 	}
 }
 
-func defaultConfig(model string, paths ConfigPaths) Config {
-	selectedModel := AvailableModels[0]
-	for _, m := range AvailableModels {
-		if m == model {
-			selectedModel = m
-			break
-		}
-	}
-
+func defaultConfig(paths ConfigPaths) Config {
 	return Config{
 		Version:           version,
-		Model:             selectedModel,
-		APITimeout:        10,
+		APITimeout:        5 * time.Minute,
 		MaxContextSize:    4000,
 		MaxRequestRetries: 3,
 		Temperature:       0.7,
@@ -95,4 +90,8 @@ func LoadConfig(paths ConfigPaths) (Config, error) {
 
 	config.ConfigPaths = paths
 	return config, nil
+}
+
+func (C *Config) UpdateConfig() error {
+	return SaveConfig(*C)
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/BryanMwangi/go-agent/utils"
 )
 
-func ValidateUser(session config.Session) error {
-	utils.Welcome(session.Name)
+func validateUser(cfg config.Config) error {
+	utils.Welcome(cfg.Name)
 	return nil
 }

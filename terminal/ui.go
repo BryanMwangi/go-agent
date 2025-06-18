@@ -2,10 +2,9 @@ package terminal
 
 import (
 	"fmt"
-	"os"
-	"time"
 
 	"github.com/BryanMwangi/go-agent/auth"
+	"github.com/BryanMwangi/go-agent/config"
 	"github.com/rivo/tview"
 )
 
@@ -20,15 +19,14 @@ func StartUI() {
 ╚██████╔╝╚██████╔╝      ██║  ██║╚██████╔╝███████╗██║ ╚████║   ██║   
  ╚═════╝  ╚═════╝       ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝
  `)
-	fmt.Println("Welcome to the go-agent terminal")
-	session := auth.AuthenticateUser()
+	cfg := config.InitConfig()
 
-	// show loader
-	ShowLoader("Verifying API Key...")
-	err := auth.ValidateUser(session)
-	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(1)
+	fmt.Println("Welcome to the go-agent terminal")
+
+	if cfg.APIKey == "" {
+		auth.AuthenticateUser(cfg)
 	}
-	StopLoader(1 * time.Second)
+
+	// run the terminal tool
+	Run(cfg)
 }

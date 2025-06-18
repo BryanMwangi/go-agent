@@ -2,18 +2,6 @@ package config
 
 import "fmt"
 
-type Session struct {
-	Name    string
-	Model   string
-	WorkDir string
-	APIKey  string
-	// "openai" or "anthropic". For now, we will only support OpenAI.
-	Provider string
-	// The API endpoint to use. Obtained from the provider after validating
-	// the model chosen
-	API APIEndpoint
-}
-
 var chatGPTAPIEndpoint = APIEndpoint{
 	BaseURL:        "https://api.openai.com/v1",
 	CompletionPath: "/chat/completions",
@@ -24,12 +12,10 @@ var providersEndpoints = map[string]APIEndpoint{
 	"anthropic": chatGPTAPIEndpoint,
 }
 
-func InitSession(name, model, apiKey string) Session {
+func InitSession(name, model string) Session {
 	provider := getProvider(model)
 	session := Session{
-		Name:     name,
 		Model:    model,
-		APIKey:   apiKey,
 		Provider: provider,
 		API:      providersEndpoints[provider],
 	}
