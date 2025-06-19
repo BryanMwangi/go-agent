@@ -33,9 +33,18 @@ func PromptUsername() string {
 }
 
 func PromptAPIKey() string {
+	validate := func(input string) error {
+		err := utils.ValidateAPIKey(input)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
 	prompt := promptui.Prompt{
-		Label: "Enter your OpenAI API Key",
-		Mask:  '*',
+		Label:    "Enter your OpenAI API Key",
+		Mask:     '*',
+		Validate: validate,
 	}
 	apiKey, err := prompt.Run()
 	if err != nil {
@@ -56,4 +65,35 @@ func PromptModel() string {
 		os.Exit(1)
 	}
 	return model
+}
+
+func PromptWorkingDirectory() string {
+	prompt := promptui.Prompt{
+		Label: "Enter your working directory",
+		Validate: func(input string) error {
+			err := utils.ValidateWorkingDirectory(input)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+	dir, err := prompt.Run()
+	if err != nil {
+		fmt.Println("Prompt failed:", err)
+		os.Exit(1)
+	}
+	return dir
+}
+
+func PromptUserInput() string {
+	prompt := promptui.Prompt{
+		Label: "Start a new conversation",
+	}
+	input, err := prompt.Run()
+	if err != nil {
+		fmt.Println("Prompt failed:", err)
+		os.Exit(1)
+	}
+	return input
 }

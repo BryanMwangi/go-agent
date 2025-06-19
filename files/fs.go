@@ -2,6 +2,7 @@ package files
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -37,4 +38,20 @@ func FindFile(fileName, workingDir string) (string, error) {
 	}
 
 	return foundPath, nil
+}
+
+func ReadFile(filePath string) ([]byte, error) {
+	code, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read file: %w", err)
+	}
+	return code, nil
+}
+
+func WriteFile(filePath string, code []byte) error {
+	err := os.WriteFile(filePath, code, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write file: %w", err)
+	}
+	return nil
 }

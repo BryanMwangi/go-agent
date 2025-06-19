@@ -1,6 +1,7 @@
 package terminal
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/BryanMwangi/go-agent/auth"
@@ -10,7 +11,7 @@ import (
 
 var App *tview.Application
 
-func StartUI() {
+func StartUI(ctx context.Context) {
 	fmt.Println(`
  ██████╗  ██████╗        █████╗  ██████╗ ███████╗███╗   ██╗████████╗
 ██╔════╝ ██╔═══██╗      ██╔══██╗██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝
@@ -27,5 +28,5 @@ func StartUI() {
 	fmt.Printf("Welcome %s to the go-agent terminal", cfg.Name)
 
 	// run the terminal tool
-	Run(cfg)
+	Run(cfg, ctx)
 }

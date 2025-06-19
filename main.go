@@ -1,7 +1,14 @@
 package main
 
-import "github.com/BryanMwangi/go-agent/terminal"
+import (
+	"context"
+
+	"github.com/BryanMwangi/go-agent/terminal"
+)
 
 func main() {
-	terminal.StartUI()
+	bgCtx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	terminal.StartUI(bgCtx)
 }

@@ -17,7 +17,6 @@ import (
 type Command struct {
 	Name        string
 	Description string
-	Execute     func(args []string, client *llm.Client) error
 }
 
 var commands = make(map[string]Command)
@@ -27,24 +26,24 @@ func RegisterCommands() {
 	commands["help"] = Command{
 		Name:        "help",
 		Description: "List all available commands",
-		Execute:     processHelpCommand,
 	}
 
 	commands["query"] = Command{
 		Name:        "query",
 		Description: "Ask a plain question to the LLM. Usage: /query What is a goroutine? or simply input your question and it will be handled as a query",
-		Execute:     processQueryCommand,
 	}
 
 	commands["format"] = Command{
 		Name:        "format",
 		Description: "Format a file using the LLM. Usage: /format main.go 'make it idiomatic or /format file:main.go 'make it idiomatic'",
-		Execute:     processFormatCommand,
 	}
 	commands["clear"] = Command{
 		Name:        "clear",
 		Description: "Clear the terminal",
-		Execute:     processClearCommand,
+	}
+	commands["exit"] = Command{
+		Name:        "exit",
+		Description: "Exit the terminal",
 	}
 }
 
@@ -67,20 +66,20 @@ func processFormatCommand(args []string, client *llm.Client) error {
 	}
 
 	query := strings.Join(args, " ")
-	files := extractFilesFromInput(query, client.Cfg)
+	fls := extractFilesFromInput(query, client.Cfg)
 
-	if len(files) == 0 {
+	if len(fls) == 0 {
 		return errors.New("no file found in working directory")
 	}
 
 	// Assume first match
 	var filePath string
-	for _, path := range files {
+	for _, path := range fls {
 		filePath = path
 		break
 	}
 
-	code, err := os.ReadFile(filePath)
+	code, err := files.ReadFile(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to read file: %w", err)
 	}
@@ -92,12 +91,12 @@ func processFormatCommand(args []string, client *llm.Client) error {
 	if err != nil {
 		return err
 	}
-
 	fmt.Println("Formatted output:\n" + string(resp))
+	// TODO: write to file
 	return nil
 }
 
-func processHelpCommand(args []string, client *llm.Client) error {
+func processHelpCommand() error {
 	fmt.Println("Available commands:")
 	for _, cmd := range commands {
 		fmt.Printf("/%s: %s\n", cmd.Name, cmd.Description)
@@ -105,8 +104,14 @@ func processHelpCommand(args []string, client *llm.Client) error {
 	return nil
 }
 
-func processClearCommand(args []string, client *llm.Client) error {
+func processClearCommand() error {
 	utils.ClearScreen()
+	return nil
+}
+
+func processExitCommand() error {
+	fmt.Println("Exiting. Goodbye!")
+	os.Exit(0)
 	return nil
 }
 

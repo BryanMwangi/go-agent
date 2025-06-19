@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 )
 
@@ -37,4 +38,18 @@ func ValidateName(name string) (bool, string, error) {
 	} else {
 		return false, "", fmt.Errorf("name contains only illegal characters")
 	}
+}
+
+func ValidateAPIKey(apiKey string) error {
+	re := regexp.MustCompile(`^[a-zA-Z0-9]{32}$`)
+	if !re.MatchString(apiKey) {
+		return fmt.Errorf("invalid API key")
+	}
+	return nil
+}
+func ValidateWorkingDirectory(dir string) error {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		return fmt.Errorf("directory does not exist")
+	}
+	return nil
 }

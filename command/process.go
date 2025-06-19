@@ -32,13 +32,15 @@ func ProcessUserInput(input string, client *llm.Client) error {
 func parseAndExecute(cmd, input string, client *llm.Client) error {
 	switch normalizeCmd(cmd) {
 	case "help":
-		return processHelpCommand([]string{}, client)
+		return processHelpCommand()
 	case "query":
 		return processQueryCommand([]string{input}, client)
 	case "format":
 		return processFormatCommand([]string{input}, client)
 	case "clear":
-		return processClearCommand([]string{}, client)
+		return processClearCommand()
+	case "exit":
+		return processExitCommand()
 	default:
 		return handleUnknownCommand(input, client)
 	}

@@ -1,7 +1,35 @@
 package terminal
 
-import "github.com/BryanMwangi/go-agent/config"
+import (
+	"context"
+	"fmt"
 
-func Run(cfg config.Config) {
+	"github.com/BryanMwangi/go-agent/command"
+	"github.com/BryanMwangi/go-agent/config"
+	"github.com/BryanMwangi/go-agent/llm"
+	"github.com/BryanMwangi/go-agent/prompts"
+)
 
+// Our main app loop
+func Run(cfg config.Config, ctx context.Context) {
+	client := llm.NewClient(&cfg)
+
+	// Ensure working directory before starting
+	if cfg.Session.GetWorkingDir() == "" {
+		dir := prompts.PromptWorkingDirectory()
+		cfg.Session.SetWorkingDir(dir)
+		cfg.UpdateConfig()
+	}
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			input := prompts.PromptUserInput()
+			if err := command.ProcessUserInput(input, client); err != nil {
+				fmt.Println(err)
+			}
+		}
+	}
 }
