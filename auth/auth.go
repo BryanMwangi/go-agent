@@ -17,9 +17,9 @@ func AuthenticateUser(cfg config.Config) {
 
 	session := config.InitSession(name, model)
 	cfg.Name = name
-
-	// enter working directory
-	// TODO: prompt for working directory
+	// update config
+	cfg.APIKey = apiKey
+	cfg.Session = session
 
 	// show loader
 	utils.ShowLoader("Verifying API Key...")
@@ -28,10 +28,7 @@ func AuthenticateUser(cfg config.Config) {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-	utils.StopLoader(1 * time.Second)
+	utils.StopLoader(3 * time.Second)
 
-	// update config
-	cfg.APIKey = apiKey
-	cfg.Session = session
 	cfg.UpdateConfig()
 }

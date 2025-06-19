@@ -13,6 +13,8 @@ func validateUser(cfg config.Config) error {
 	client := llm.NewClient(&cfg)
 	r, err := llm.OnStartQuery(client)
 	if err != nil {
+		fmt.Printf("Invalid API key. Please try again. Error: %s\n", err)
+
 		return config.InvalidateSession(cfg)
 	}
 	fmt.Println(string(r))

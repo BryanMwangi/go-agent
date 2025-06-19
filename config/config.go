@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -46,8 +45,6 @@ func InitConfig() Config {
 func buildPaths() ConfigPaths {
 	configDir := filepath.Join(os.Getenv("HOME"), ".go-agent")
 	configFile := filepath.Join(configDir, "config.json")
-
-	fmt.Println(configDir)
 
 	_ = os.MkdirAll(configDir, 0755)
 

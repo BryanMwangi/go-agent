@@ -24,6 +24,8 @@ func Run(cfg config.Config, ctx context.Context) {
 	for {
 		select {
 		case <-ctx.Done():
+			fmt.Println("\nShutting down...")
+			// TODO: save session or further tasks before exiting
 			return
 		default:
 			input := prompts.PromptUserInput()

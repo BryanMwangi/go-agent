@@ -25,6 +25,7 @@ func StartUI(ctx context.Context) {
 	if cfg.APIKey == "" {
 		auth.AuthenticateUser(cfg)
 	}
+
 	fmt.Printf("Welcome %s to the go-agent terminal", cfg.Name)
 
 	// run the terminal tool
