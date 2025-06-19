@@ -17,14 +17,16 @@ type Client struct {
 	apiKey  string
 	baseURL string
 	model   string
+	Cfg     *config.Config
 	client  *http.Client
 }
 
-func NewClient(cfg config.Config) *Client {
+func NewClient(cfg *config.Config) *Client {
 	return &Client{
 		apiKey:  cfg.APIKey,
 		baseURL: cfg.Session.API.BaseURL + cfg.Session.API.CompletionPath,
 		model:   cfg.Session.Model,
 		client:  http.DefaultClient,
+		Cfg:     cfg,
 	}
 }

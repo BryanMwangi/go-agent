@@ -3,7 +3,7 @@ package llm
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -60,7 +60,9 @@ func (c *Client) send(messages []message) ([]byte, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return nil, errors.New("failed: " + resp.Status)
+		body, _ := io.ReadAll(resp.Body) //ignore errors if body is nil or malformed
+		apiErr := fmt.Errorf("failed: %s\n%s", resp.Status, string(body))
+		return nil, handleErrorCodes(resp.StatusCode, apiErr, *c.Cfg)
 	}
 
 	return io.ReadAll(resp.Body)

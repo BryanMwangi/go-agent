@@ -1,6 +1,9 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 var chatGPTAPIEndpoint = APIEndpoint{
 	BaseURL:        "https://api.openai.com/v1",
@@ -40,4 +43,14 @@ func (S *Session) SetWorkingDir(dir string) {
 
 func (S *Session) GetWorkingDir() string {
 	return S.WorkDir
+}
+
+func InvalidateSession(cfg Config) error {
+	err := os.Remove(cfg.ConfigPaths.ConfigFile)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Restart the app to login again")
+	os.Exit(0)
+	return nil
 }

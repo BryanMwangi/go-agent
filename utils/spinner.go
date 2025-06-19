@@ -27,7 +27,3 @@ func StopLoader(sleep time.Duration) {
 	time.Sleep(sleep)
 	TermSpinner.Stop()
 }
-
-func ClearScreen() {
-	fmt.Print("\x1b[2J\x1b[0f")
-}
