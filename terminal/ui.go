@@ -21,11 +21,10 @@ func StartUI() {
  `)
 	cfg := config.InitConfig()
 
-	fmt.Println("Welcome to the go-agent terminal")
-
 	if cfg.APIKey == "" {
 		auth.AuthenticateUser(cfg)
 	}
+	fmt.Printf("Welcome %s to the go-agent terminal", cfg.Name)
 
 	// run the terminal tool
 	Run(cfg)
