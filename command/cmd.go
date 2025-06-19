@@ -32,14 +32,19 @@ func RegisterCommands() {
 
 	commands["query"] = Command{
 		Name:        "query",
-		Description: "Ask a plain question to the LLM. Usage: /query What is a goroutine?",
+		Description: "Ask a plain question to the LLM. Usage: /query What is a goroutine? or simply input your question and it will be handled as a query",
 		Execute:     processQueryCommand,
 	}
 
 	commands["format"] = Command{
 		Name:        "format",
-		Description: "Format a file using the LLM. Usage: /format main.go 'make it idiomatic'",
+		Description: "Format a file using the LLM. Usage: /format main.go 'make it idiomatic or /format file:main.go 'make it idiomatic'",
 		Execute:     processFormatCommand,
+	}
+	commands["clear"] = Command{
+		Name:        "clear",
+		Description: "Clear the terminal",
+		Execute:     processClearCommand,
 	}
 }
 
@@ -100,27 +105,9 @@ func processHelpCommand(args []string, client *llm.Client) error {
 	return nil
 }
 
-// ParseAndExecute checks if input is a command and runs it.
-func ParseAndExecute(input string, client *llm.Client) error {
-	if !strings.HasPrefix(input, "/") {
-		return handleUnknownCommand(input, client)
-	}
-
-	parts := strings.Fields(strings.TrimPrefix(input, "/"))
-	if len(parts) == 0 {
-		return errors.New("empty command")
-	}
-
-	cmdName := parts[0]
-	args := parts[1:]
-
-	cmd, exists := commands[cmdName]
-	if !exists {
-		return handleUnknownCommand(input, client)
-	}
-
-	err := cmd.Execute(args, client)
-	return err
+func processClearCommand(args []string, client *llm.Client) error {
+	utils.ClearScreen()
+	return nil
 }
 
 func handleUnknownCommand(input string, client *llm.Client) error {
@@ -136,7 +123,7 @@ func extractFilesFromInput(input string, cfg *config.Config) map[string]string {
 	// Look for "file: filename.go" patterns
 	matches := fileRegex.FindAllStringSubmatch(input, -1)
 	for _, match := range matches {
-		filePath, err := files.FindFile(match[1], cfg.Session.WorkDir)
+		filePath, err := files.FindFile(match[1], cfg.Session.GetWorkingDir())
 		if err != nil {
 			fmt.Println("Error finding file:", err)
 			continue
@@ -148,7 +135,7 @@ func extractFilesFromInput(input string, cfg *config.Config) map[string]string {
 	if len(filesMap) == 0 {
 		fields := strings.Fields(input)
 		if len(fields) > 0 {
-			if path, err := files.FindFile(fields[0], cfg.Session.WorkDir); err == nil {
+			if path, err := files.FindFile(fields[0], cfg.Session.GetWorkingDir()); err == nil {
 				filesMap[fields[0]] = path
 			}
 		}
