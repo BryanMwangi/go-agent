@@ -17,6 +17,7 @@ func AuthenticateUser(cfg config.Config) {
 
 	session := config.InitSession(name, model)
 	cfg.Name = name
+
 	// update config
 	cfg.APIKey = apiKey
 	cfg.Session = session

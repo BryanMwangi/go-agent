@@ -2,10 +2,7 @@ module github.com/BryanMwangi/go-agent
 
 go 1.24.1
 
-require (
-	github.com/briandowns/spinner v1.23.2
-	github.com/rivo/tview v0.0.0-20250501113434-0c592cd31026
-)
+require github.com/briandowns/spinner v1.23.2
 
 require (
 	github.com/atotto/clipboard v0.1.4 // indirect
@@ -29,8 +26,6 @@ require (
 	github.com/charmbracelet/bubbles v0.21.0
 	github.com/charmbracelet/bubbletea v1.3.5
 	github.com/fatih/color v1.7.0 // indirect
-	github.com/gdamore/encoding v1.0.0 // indirect
-	github.com/gdamore/tcell/v2 v2.7.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

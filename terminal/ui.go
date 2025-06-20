@@ -6,10 +6,7 @@ import (
 
 	"github.com/BryanMwangi/go-agent/auth"
 	"github.com/BryanMwangi/go-agent/config"
-	"github.com/rivo/tview"
 )
-
-var App *tview.Application
 
 func StartUI(ctx context.Context) {
 	fmt.Println(`

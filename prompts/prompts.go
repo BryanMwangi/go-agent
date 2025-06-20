@@ -27,7 +27,7 @@ func initialModel(label string, mode string, items []string) model {
 	ti := textinput.New()
 	ti.Placeholder = label
 	ti.Focus()
-	ti.CharLimit = 100
+	ti.CharLimit = 500
 	ti.Width = 40
 
 	var l list.Model
@@ -67,10 +67,13 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.Type {
-		case tea.KeyCtrlC, tea.KeyEsc:
+		switch keypress := msg.String(); keypress {
+		case "q":
 			return m, tea.Quit
-		case tea.KeyEnter:
+		case "ctrl+c":
+			os.Exit(0)
+			return m, tea.Quit
+		case "enter":
 			if m.mode == "model" && len(m.items) > 0 {
 				m.choice = m.list.SelectedItem().(listItem).Title()
 				m.done = true

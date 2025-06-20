@@ -17,8 +17,10 @@ func Run(cfg config.Config, ctx context.Context) {
 	// Ensure working directory before starting
 	if cfg.Session.GetWorkingDir() == "" {
 		dir := prompts.PromptWorkingDirectory()
-		cfg.Session.SetWorkingDir(dir)
-		cfg.UpdateConfig()
+		if dir != "" {
+			cfg.Session.SetWorkingDir(dir)
+			cfg.UpdateConfig()
+		}
 	}
 
 	for {
@@ -29,8 +31,10 @@ func Run(cfg config.Config, ctx context.Context) {
 			return
 		default:
 			input := prompts.PromptUserInput()
-			if err := command.ProcessUserInput(input, client); err != nil {
-				fmt.Println(err)
+			if input != "" {
+				if err := command.ProcessUserInput(input, client); err != nil {
+					fmt.Println(err)
+				}
 			}
 		}
 	}

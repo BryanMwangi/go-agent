@@ -22,6 +22,9 @@ type Client struct {
 }
 
 func NewClient(cfg *config.Config) *Client {
+	if cfg.APIKey == "" {
+		panic("API Key is empty")
+	}
 	return &Client{
 		apiKey:  cfg.APIKey,
 		baseURL: cfg.Session.API.BaseURL + cfg.Session.API.CompletionPath,

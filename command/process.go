@@ -21,6 +21,9 @@ func normalizeCmd(cmd string) string {
 }
 
 func ProcessUserInput(input string, client *llm.Client) error {
+	if input == "" {
+		return nil
+	}
 	isCommand, cmd, newInput := extractCommandFromInput(input)
 	if isCommand {
 		return parseAndExecute(cmd, newInput, client)

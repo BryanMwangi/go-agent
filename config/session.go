@@ -16,6 +16,9 @@ var providersEndpoints = map[string]APIEndpoint{
 }
 
 func InitSession(name, model string) Session {
+	if name == "" || model == "" {
+		return Session{}
+	}
 	provider := getProvider(model)
 	session := Session{
 		Model:    model,
