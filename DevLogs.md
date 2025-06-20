@@ -74,3 +74,37 @@ we ask the user to select a new working directory. It is important to note that 
 ## 23:10-[to be determined]
 
 Small break to think about command flow and prompts.
+
+## 2025-06-19, 20:00
+
+Implemented basic command system: `/query`, `/format`, `/help`. Commands are parsed from user input and routed to relevant handlers. LLM interaction is now streamlined and tested using OpenAI’s `chat/completions` endpoint. Input handling, file loading, and code formatting using LLMs is functional.
+
+## 21:00-22:20
+
+Added context-aware prompting system. Responses from LLM can be parsed into simplified summaries to form future context. We now track prompts, messages, and formatting history for each interaction.
+
+## 22:20-22:45
+
+Replaced `promptui` with `bubbletea` to allow us to have better state management, split views, and full control over the UI. Bubble Tea allows us to eventually display diffs, code blocks, and other more complex terminal interactions inside a single app loop.
+
+## 23:00-23:30
+
+Small break to think about code diff views and other advanced LLM tasks.
+
+## 23:30-23:45
+
+Successfully migrated all prompts (username, API key, model selection, working directory, and user input) to Bubble Tea. Reused the previous prompts package for the new prompts.
+
+## 2025-06-20, 11:30
+
+Built a command parser that allows `/format file.go "message"` and `/query` to work naturally. When commands are not recognized, the input is routed to the LLM directly for natural language interpretation.
+
+## 11:50-12:00
+
+Added error handling and diagnostic output when API fails (e.g., invalid API key, 429 rate limit, 500 server errors). Also ensured session is invalidated and reauthentication requested when needed.
+
+## 12:00-13:09
+
+Laid the groundwork for future code diff views and more advanced LLM tasks. File discovery and context handling is abstracted, and responses from the LLM are now parsed and displayed cleanly.
+
+## [to be continued...]
